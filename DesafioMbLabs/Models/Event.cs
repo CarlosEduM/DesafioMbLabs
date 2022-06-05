@@ -69,6 +69,8 @@ namespace DesafioMbLabs.Models
             EndDateToBuy = endDateToBuy;
             Location = location;
             Tickets = new();
+
+            ValidateEventDateTimes();
         }
 
         /// <summary>
@@ -102,6 +104,23 @@ namespace DesafioMbLabs.Models
             StartDateToBuy = startDateToBuy;
             EndDateToBuy = endDateToBuy;
             Location = location;
+
+            ValidateEventDateTimes();
+        }
+
+        public void ValidateEventDateTimes()
+        {
+            if (StartDateAndTime < DateTime.Today.AddDays(1))
+                throw new AppException("Start date must be a day after today");
+
+            if (StartDateToBuy < DateTime.Today.AddDays(1))
+                throw new AppException("Start date to buy must be a day after today");
+
+            if (EndDateAndTime > StartDateAndTime)
+                throw new AppException("End date must be a day after start date");
+
+            if (EndDateToBuy > StartDateToBuy)
+                throw new AppException("End date to buy must be a day after start date to buy");
         }
 
         /// <summary>
@@ -113,6 +132,15 @@ namespace DesafioMbLabs.Models
         {
             if (NumberOfTickets > Tickets.Count + tickets.Count)
                 throw new AppException("Maximum number of tickets has been exceeded");
+
+            foreach (Ticket ticket in tickets)
+            {
+                if (ticket.TransactionData.BuyDateTime < StartDateToBuy)
+                    throw new AppException("Ticket bought date must be greater than start date to buy");
+
+                if (ticket.TransactionData.BuyDateTime >= EndDateToBuy)
+                    throw new AppException("Ticket bought date must be less than end date to buy");
+            }
 
             Tickets.AddRange(tickets);
         }

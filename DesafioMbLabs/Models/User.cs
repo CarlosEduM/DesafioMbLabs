@@ -88,11 +88,6 @@ namespace DesafioMbLabs.Models
             Payments = payment;
         }
 
-        public void BuyTickets()
-        {
-
-        }
-
         /// <summary>
         /// Validates the CPF camp
         /// </summary>
