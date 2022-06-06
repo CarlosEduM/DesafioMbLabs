@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesafioMbLabs.Models.AppExceptions;
+using System;
 using System.Collections.Generic;
 
 namespace DesafioMbLabs.Models
@@ -51,12 +52,20 @@ namespace DesafioMbLabs.Models
         /// <param name="buyer">Buyer of tickets</param>
         /// <param name="paymentForm">Paymento form of transaction</param>
         /// <exception cref="ArgumentException"></exception>
-        public Transaction(Event ticketsEvent, List<Ticket> tickets, User buyer, PaymentForm paymentForm)
+        public Transaction(Event ticketsEvent, List<Ticket> tickets, PaymentForm paymentForm)
         {
+            if (!tickets[0].Owner.Payments.Contains(paymentForm))
+                throw new AppException($"This payment form doesn't exist to user {tickets[0].Owner}");
+
             BuyDateTime = DateTime.UtcNow;
-            Buyer = buyer;
+            Buyer = tickets[0].Owner;
             PaymentForm = paymentForm;
             TotalPrice = ticketsEvent.TicketPrice * tickets.Count;
+
+            foreach (Ticket ticket in tickets)
+            {
+                ticket.TransactionData = this;
+            }
 
             Tickets = tickets;
         }

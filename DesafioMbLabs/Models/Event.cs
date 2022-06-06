@@ -113,14 +113,14 @@ namespace DesafioMbLabs.Models
             if (StartDateAndTime < DateTime.Today.AddDays(1))
                 throw new AppException("Start date must be a day after today");
 
-            if (StartDateToBuy < DateTime.Today.AddDays(1))
-                throw new AppException("Start date to buy must be a day after today");
+            if (StartDateToBuy < DateTime.Now)
+                throw new AppException("Start date to buy must be after now");
 
-            if (EndDateAndTime > StartDateAndTime)
-                throw new AppException("End date must be a day after start date");
+            if (EndDateAndTime < StartDateAndTime)
+                throw new AppException("End date must be after start date");
 
-            if (EndDateToBuy > StartDateToBuy)
-                throw new AppException("End date to buy must be a day after start date to buy");
+            if (EndDateToBuy < StartDateToBuy)
+                throw new AppException("End date to buy must be after start date to buy");
         }
 
         /// <summary>
