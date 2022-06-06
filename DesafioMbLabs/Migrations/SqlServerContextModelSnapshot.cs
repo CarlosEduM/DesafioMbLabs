@@ -169,6 +169,11 @@ namespace DesafioMbLabs.Migrations
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -187,6 +192,8 @@ namespace DesafioMbLabs.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
             modelBuilder.Entity("DesafioMbLabs.Models.EventManager", b =>
@@ -203,7 +210,9 @@ namespace DesafioMbLabs.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.ToTable("EventManagers");
+                    b.ToTable("Users");
+
+                    b.HasDiscriminator().HasValue("EventManager");
                 });
 
             modelBuilder.Entity("DesafioMbLabs.Models.Event", b =>
@@ -229,7 +238,7 @@ namespace DesafioMbLabs.Migrations
                     b.HasOne("DesafioMbLabs.Models.Event", "TicketEvent")
                         .WithMany("Tickets")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("DesafioMbLabs.Models.Transaction", "TransactionData")
@@ -241,7 +250,7 @@ namespace DesafioMbLabs.Migrations
                     b.HasOne("DesafioMbLabs.Models.User", "Owner")
                         .WithMany("Tickets")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -264,15 +273,6 @@ namespace DesafioMbLabs.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("PaymentForm");
-                });
-
-            modelBuilder.Entity("DesafioMbLabs.Models.EventManager", b =>
-                {
-                    b.HasOne("DesafioMbLabs.Models.User", null)
-                        .WithOne()
-                        .HasForeignKey("DesafioMbLabs.Models.EventManager", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("DesafioMbLabs.Models.Event", b =>

@@ -23,7 +23,9 @@ namespace DesafioMbLabs.Models
         [DataType(DataType.DateTime)]
         public DateTime PaymentDateTime { get; set; }
 
+        [NotMapped]
         private List<Ticket> _tickets;
+        
         public List<Ticket> Tickets
         {
             get { return _tickets; }

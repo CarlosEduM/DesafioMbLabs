@@ -8,7 +8,6 @@ namespace DesafioMbLabs.Models
     /// <summary>
     /// Represents a event manager
     /// </summary>
-    [Table("EventManagers")]
     public class EventManager : User
     {
         [NotMapped]

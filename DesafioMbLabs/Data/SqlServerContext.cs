@@ -21,5 +21,27 @@ namespace DesafioMbLabs.Data
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasDiscriminator<string>("Discriminator")
+                .HasValue<User>(nameof(User))
+                .HasValue<EventManager>(nameof(EventManager));
+
+            modelBuilder.Entity<User>()
+                .Property("Discriminator")
+                .HasMaxLength(64);
+
+            modelBuilder.Entity<Ticket>()
+                .HasOne(p => p.Owner)
+                .WithMany(p => p.Tickets)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Ticket>()
+                .HasOne(p => p.TicketEvent)
+                .WithMany(p => p.Tickets)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }
