@@ -10,6 +10,7 @@ namespace DesafioMbLabs.Models
     public class Ticket
     {
         [Key]
+        [Column("TicketId")]
         public long Id { get; set; }
 
         [Required]

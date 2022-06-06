@@ -13,6 +13,7 @@ namespace DesafioMbLabs.Models
     public class User
     {
         [Key]
+        [Column("UserId")]
         public int Id { get; set; }
 
         [Required]

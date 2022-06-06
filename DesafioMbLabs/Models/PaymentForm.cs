@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesafioMbLabs.Models
 {
@@ -9,6 +10,7 @@ namespace DesafioMbLabs.Models
     public class PaymentForm
     {
         [Key]
+        [Column("PaymentFormId")]
         public int Id { get; set; }
 
         [Required]

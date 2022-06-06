@@ -13,6 +13,7 @@ namespace DesafioMbLabs.Models
     public class Event
     {
         [Key]
+        [Column("TicketId")]
         public int Id { get; set; }
 
         [Required]

@@ -13,6 +13,7 @@ namespace DesafioMbLabs.Models
     public class Transaction
     {
         [Key]
+        [Column("TransactionId")]
         public int Id { get; set; }
 
         [Required]
@@ -38,10 +39,6 @@ namespace DesafioMbLabs.Models
         [Required]
         [EnumDataType(typeof(PaymentStatus))]
         public PaymentStatus PaymentStatus { get; set; }
-
-        [Required]
-        [ForeignKey("UserId")]
-        public User Buyer { get; set; }
 
         [Required]
         [ForeignKey("PaymentFormId")]
@@ -73,7 +70,6 @@ namespace DesafioMbLabs.Models
                 throw new AppException($"This payment form doesn't exist to user {tickets[0].Owner}");
 
             BuyDateTime = DateTime.UtcNow;
-            Buyer = tickets[0].Owner;
             PaymentForm = paymentForm;
             TotalPrice = ticketsEvent.TicketPrice * tickets.Count;
 
@@ -97,14 +93,13 @@ namespace DesafioMbLabs.Models
         /// <param name="paymentForm">Payment form of transaction</param>
         /// <param name="totalPrice">Total price of transaction</param>
         public Transaction(int id, DateTime buyDateTime, DateTime paymentDateTime, List<Ticket> tickets,
-            PaymentStatus paymentStatus, User buyer, PaymentForm paymentForm, double totalPrice)
+            PaymentStatus paymentStatus, PaymentForm paymentForm, double totalPrice)
         {
             Id = id;
             BuyDateTime = buyDateTime;
             PaymentDateTime = paymentDateTime;
             Tickets = tickets;
             PaymentStatus = paymentStatus;
-            Buyer = buyer;
             PaymentForm = paymentForm;
             TotalPrice = totalPrice;
         }
