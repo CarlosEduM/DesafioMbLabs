@@ -9,7 +9,7 @@ namespace DesafioTestes
     public class ModelsTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TesteCriaçãoDeTicket()
         {
             EventManager user = new EventManager("aa@aa.com", "aaaaa", "007.428.201-81", "Carlos Eduardo", "98.640.072/0001-06", "Organization");
 

@@ -26,7 +26,7 @@ namespace DesafioMbLabs.Models
                 if (!IsCpf(value))
                     throw new FormatException($"The string {value} is not a valid CPF");
 
-                _cpf = value;
+                _cpf = FormatCpf(value);
             }
         }
 
@@ -88,6 +88,11 @@ namespace DesafioMbLabs.Models
             Payments = payment;
         }
 
+        public static string FormatCpf(string cpf)
+        {
+            return cpf.Trim().Replace(".", "").Replace("-", "");
+        }
+
         /// <summary>
         /// Validates the CPF camp
         /// </summary>
@@ -95,8 +100,7 @@ namespace DesafioMbLabs.Models
         /// <returns>true if the CPF is valid and false if not</returns>
         public static bool IsCpf(string cpf)
         {
-            cpf = cpf.Trim();
-            cpf = cpf.Replace(".", "").Replace("-", "");
+            cpf = FormatCpf(cpf);
 
             if (cpf.Length != 11)
                 return false;

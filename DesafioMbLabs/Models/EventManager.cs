@@ -18,7 +18,7 @@ namespace DesafioMbLabs.Models
                 if (!IsCnpj(value))
                     throw new FormatException($"The string {value} is not a valid CNPJ");
 
-                _cnpj = value;
+                _cnpj = FormatCnpj(value);
             }
         }
 
@@ -51,6 +51,11 @@ namespace DesafioMbLabs.Models
             Events = new();
         }
 
+        public static string FormatCnpj(string cnpj)
+        {
+            return cnpj.Trim().Replace(".", "").Replace("-", "").Replace("/", "");
+        }
+
         /// <summary>
         /// Valid if is a valid cnpj
         /// </summary>
@@ -58,8 +63,7 @@ namespace DesafioMbLabs.Models
         /// <returns></returns>
         public static bool IsCnpj(string cnpj)
         {
-            cnpj = cnpj.Trim();
-            cnpj = cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+            cnpj = FormatCnpj(cnpj);
 
             if (cnpj.Length != 14)
                 return false;
