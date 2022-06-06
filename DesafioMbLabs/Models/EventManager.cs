@@ -8,6 +8,8 @@ namespace DesafioMbLabs.Models
     /// </summary>
     public class EventManager : User
     {
+        public override string Rule { get { return nameof(EventManager); } }
+
         private string _cnpj;
 
         public string Cnpj

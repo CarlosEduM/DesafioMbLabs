@@ -14,7 +14,7 @@ namespace DesafioMbLabs.Models
 
         public string Password { get; set; }
 
-        public string Rule { get { return nameof(User); } }
+        public virtual string Rule { get { return nameof(User); } }
 
         private string _cpf;
 
