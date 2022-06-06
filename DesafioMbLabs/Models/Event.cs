@@ -1,36 +1,63 @@
 ﻿using DesafioMbLabs.Models.AppExceptions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesafioMbLabs.Models
 {
     /// <summary>
     /// Represents a event
     /// </summary>
+    [Table("Events")]
     public class Event
     {
+        [Key]
         public int Id { get; set; }
 
+        [Required]
+        [MinLength(5)]
+        [MaxLength(64)]
         public string Name { get; set; }
 
+        [Required]
+        [MinLength(64)]
+        [MaxLength(256)]
         public string Description { get; set; }
 
+        [Required]
+        [MinLength(1)]
         public int NumberOfTickets { get; set; }
 
+        [Required]
+        [MinLength(0)]
         public double TicketPrice { get; set; }
 
         public List<Ticket> Tickets { get; set; }
 
+        [Required]
+        [ForeignKey("ManagerId")]
         public EventManager Manager { get; set; }
 
+        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime StartDateAndTime { get; set; }
 
+        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime EndDateAndTime { get; set; }
 
+        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime StartDateToBuy { get; set; }
 
+        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime EndDateToBuy { get; set; }
 
+        [Required]
+        [MinLength(16)]
+        [MaxLength(256)]
         public string Location { get; set; }
 
         /// <summary>

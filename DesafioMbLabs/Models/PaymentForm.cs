@@ -1,9 +1,23 @@
-﻿namespace DesafioMbLabs.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DesafioMbLabs.Models
 {
+    /// <summary>
+    /// Type of payment
+    /// </summary>
+    [Table("PaymentForms")]
     public class PaymentForm
     {
+        [Key]
         public int Id { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(64)]
         public string Name { get; set; }
+
+        [Required]
+        [EnumDataType(typeof(PaymentMethod))]
         public virtual PaymentMethod Method { get { return PaymentMethod.MyTypeOfPayment; } }
 
         /// <summary>

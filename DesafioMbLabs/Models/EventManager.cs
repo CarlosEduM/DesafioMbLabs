@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesafioMbLabs.Models
 {
     /// <summary>
     /// Represents a event manager
     /// </summary>
+    [Table("EventManagers")]
     public class EventManager : User
     {
+        [NotMapped]
         public override string Rule { get { return nameof(EventManager); } }
 
+        [NotMapped]
         private string _cnpj;
 
+        [Required]
+        [MinLength(14)]
+        [MaxLength(18)]
         public string Cnpj
         {
             get { return _cnpj; }
@@ -24,6 +32,9 @@ namespace DesafioMbLabs.Models
             }
         }
 
+        [Required]
+        [MinLength(8)]
+        [MaxLength(64)]
         public string OrganizationName { get; set; }
 
         public List<Event> Events { get; set; }

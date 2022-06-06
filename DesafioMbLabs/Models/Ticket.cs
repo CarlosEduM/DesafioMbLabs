@@ -1,16 +1,27 @@
-﻿namespace DesafioMbLabs.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DesafioMbLabs.Models
 {
     /// <summary>
     /// Represents a event ticket
     /// </summary>
+    [Table("Tickets")]
     public class Ticket
     {
+        [Key]
         public long Id { get; set; }
 
+        [Required]
+        [ForeignKey("EventId")]
         public Event TicketEvent { get; set; }
 
+        [Required]
+        [ForeignKey("UserId")]
         public User Owner { get; set; }
 
+        [Required]
+        [ForeignKey("TransactionId")]
         public Transaction TransactionData { get; set; }
 
         /// <summary>

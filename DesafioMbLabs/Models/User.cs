@@ -1,23 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace DesafioMbLabs.Models
 {
     /// <summary>
     /// Default user for the app
     /// </summary>
+    [Table("Users")]
     public class User
     {
+        [Key]
         public int Id { get; set; }
 
+        [Required]
+        [MinLength(8)]
+        [MaxLength(64)]
+        [EmailAddress]
         public string Email { get; set; }
 
+        [Required]
+        [MinLength(8)]
+        [MaxLength(64)]
         public string Password { get; set; }
 
+        [NotMapped]
         public virtual string Rule { get { return nameof(User); } }
 
+        [NotMapped]
         private string _cpf;
 
+        [Required]
+        [MinLength(11)]
+        [MaxLength(13)]
         public string Cpf
         {
             get { return _cpf; }
@@ -30,6 +47,9 @@ namespace DesafioMbLabs.Models
             }
         }
 
+        [Required]
+        [MinLength(8)]
+        [MaxLength(64)]
         public string Name { get; set; }
 
         public List<Transaction> Transactions { get; set; }
@@ -88,6 +108,11 @@ namespace DesafioMbLabs.Models
             Payments = payment;
         }
 
+        /// <summary>
+        /// Formats a CPF
+        /// </summary>
+        /// <param name="cpf">The CPF to format</param>
+        /// <returns>A formated CPF</returns>
         public static string FormatCpf(string cpf)
         {
             return cpf.Trim().Replace(".", "").Replace("-", "");

@@ -1,18 +1,25 @@
 ﻿using DesafioMbLabs.Models.AppExceptions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesafioMbLabs.Models
 {
     /// <summary>
     /// Represents a transaction made by a user
     /// </summary>
+    [Table("Transactions")]
     public class Transaction
     {
+        [Key]
         public int Id { get; set; }
 
+        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime BuyDateTime { get; set; }
 
+        [DataType(DataType.DateTime)]
         public DateTime PaymentDateTime { get; set; }
 
         private List<Ticket> _tickets;
@@ -28,12 +35,20 @@ namespace DesafioMbLabs.Models
             }
         }
 
+        [Required]
+        [EnumDataType(typeof(PaymentStatus))]
         public PaymentStatus PaymentStatus { get; set; }
 
+        [Required]
+        [ForeignKey("UserId")]
         public User Buyer { get; set; }
 
+        [Required]
+        [ForeignKey("PaymentFormId")]
         public PaymentForm PaymentForm { get; set; }
 
+        [Required]
+        [Column(TypeName = "decimal(5, 2)")]
         public double TotalPrice { get; set; }
 
         /// <summary>
