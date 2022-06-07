@@ -1,5 +1,7 @@
 ﻿using DesafioMbLabs.Data;
 using DesafioMbLabs.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DesafioMbLabs.Services
@@ -13,25 +15,38 @@ namespace DesafioMbLabs.Services
             _dbContext = dbContext;
         }
 
-        public Task DeleteUser(int id)
+        public async Task DeleteUser(User user)
         {
-            throw new System.NotImplementedException();
+            _dbContext.Remove(user);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<User> GetUser(int id)
+        public async Task<User> GetUser(string email, string password)
         {
-            throw new System.NotImplementedException();
+            return await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
         }
 
-        public async Task NewUser(User user)
+        public async Task<User> GetUser(string email)
+        {
+            return await _dbContext.Users
+                .Include(u => u.Transactions)
+                .Include(u => u.Tickets)
+                .Include(u => u.Payments)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task CreateUser(User user)
         {
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
         }
 
-        public Task UpdateUser(User user)
+        public async Task UpdateUser(User user)
         {
-            throw new System.NotImplementedException();
+            _dbContext.Users.Update(user).State = EntityState.Modified;
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -5,12 +5,14 @@ namespace DesafioMbLabs.Services
 {
     public interface IUserService
     {
-        public Task NewUser(User user);
+        public Task CreateUser(User user);
 
-        public Task<User> GetUser(int id);
+        public Task<User> GetUser(string email, string password);
+
+        public Task<User> GetUser(string email);
 
         public Task UpdateUser(User user);
 
-        public Task DeleteUser(int id);
+        public Task DeleteUser(User user);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesafioMbLabs.Models.CustomAttributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,23 +14,11 @@ namespace DesafioMbLabs.Models
         [NotMapped]
         public override string Rule { get { return nameof(EventManager); } }
 
-        [NotMapped]
-        private string _cnpj;
-
         [Required]
         [MinLength(14)]
         [MaxLength(18)]
-        public string Cnpj
-        {
-            get { return _cnpj; }
-            set
-            {
-                if (!IsCnpj(value))
-                    throw new FormatException($"The string {value} is not a valid CNPJ");
-
-                _cnpj = FormatCnpj(value);
-            }
-        }
+        [CustomValidationCnpj]
+        public string Cnpj { get; set; }
 
         [Required]
         [MinLength(8)]
@@ -41,9 +30,9 @@ namespace DesafioMbLabs.Models
         /// <summary>
         /// Create a void manager User
         /// </summary>
-        public EventManager()
+        public EventManager() : base()
         {
-
+            Events = new();
         }
 
         /// <summary>

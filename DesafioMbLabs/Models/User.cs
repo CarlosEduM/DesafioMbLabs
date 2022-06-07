@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DesafioMbLabs.Models.CustomAttributes;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesafioMbLabs.Models
@@ -10,43 +11,16 @@ namespace DesafioMbLabs.Models
     /// Default user for the app
     /// </summary>
     [Table("Users")]
-    public class User
+    public class User : UserBase
     {
-        [Key]
-        [Column("UserId")]
-        public int Id { get; set; }
-
-        [Required]
-        [MinLength(8)]
-        [MaxLength(64)]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [MinLength(8)]
-        [MaxLength(64)]
-        public string Password { get; set; }
-
         [NotMapped]
         public virtual string Rule { get { return nameof(User); } }
-
-        [NotMapped]
-        private string _cpf;
 
         [Required]
         [MinLength(11)]
         [MaxLength(13)]
-        public string Cpf
-        {
-            get { return _cpf; }
-            set
-            {
-                if (!IsCpf(value))
-                    throw new FormatException($"The string {value} is not a valid CPF");
-
-                _cpf = FormatCpf(value);
-            }
-        }
+        [CustomValidationCpf]
+        public string Cpf { get; set; }
 
         [Required]
         [MinLength(8)]
@@ -57,7 +31,21 @@ namespace DesafioMbLabs.Models
 
         public List<Ticket> Tickets { get; set; }
 
-        public List<PaymentForm> Payments { get; set; }
+        [NotMapped]
+        private List<PaymentForm> _payments;
+
+        public List<PaymentForm> Payments 
+        {
+            get { return _payments; }
+            set
+            {
+                foreach(var payment in value)
+                {
+                    payment.Owner = this;
+                }
+                _payments = value;
+            }
+        }
 
         /// <summary>
         /// Create a void user
@@ -66,6 +54,7 @@ namespace DesafioMbLabs.Models
         {
             Transactions = new List<Transaction>();
             Tickets = new List<Ticket>();
+            Payments = new List<PaymentForm>();
         }
 
         /// <summary>
@@ -75,10 +64,8 @@ namespace DesafioMbLabs.Models
         /// <param name="password">User password</param>
         /// <param name="cpf">User CPF</param>
         /// <param name="name">Username</param>
-        public User(string email, string password, string cpf, string name)
+        public User(string email, string password, string cpf, string name) : base(email, password)
         {
-            Email = email;
-            Password = password;
             Cpf = cpf;
             Name = name;
             Transactions = new();
@@ -97,11 +84,8 @@ namespace DesafioMbLabs.Models
         /// <param name="transactions">Transactions made by the user</param>
         /// <param name="tickets">User tickets</param>
         public User(int id, string email, string password, string cpf, string name,
-            List<Transaction> transactions, List<Ticket> tickets, List<PaymentForm> payment)
+            List<Transaction> transactions, List<Ticket> tickets, List<PaymentForm> payment) : base(id, email, password)
         {
-            Id = id;
-            Email = email;
-            Password = password;
             Cpf = cpf;
             Name = name;
             Transactions = transactions;
@@ -131,7 +115,7 @@ namespace DesafioMbLabs.Models
             if (cpf.Length != 11)
                 return false;
 
-            string tempCpf = cpf.Substring(0, 9);
+            string tempCpf = cpf[..9];
             int sum = 0;
 
             for (int i = 0; i < 9; i++)
