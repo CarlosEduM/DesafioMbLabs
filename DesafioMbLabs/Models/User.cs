@@ -34,18 +34,7 @@ namespace DesafioMbLabs.Models
         [NotMapped]
         private List<PaymentForm> _payments;
 
-        public List<PaymentForm> Payments 
-        {
-            get { return _payments; }
-            set
-            {
-                foreach(var payment in value)
-                {
-                    payment.Owner = this;
-                }
-                _payments = value;
-            }
-        }
+        public List<PaymentForm> Payments { get; set; }
 
         /// <summary>
         /// Create a void user

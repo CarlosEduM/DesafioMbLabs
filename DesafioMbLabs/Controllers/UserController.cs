@@ -93,12 +93,25 @@ namespace DesafioMbLabs.Controllers
 
             foreach (var ops in newUser.Operations)
             {
-                if (ops.path == "/tickets" || ops.path == "/transactions")
-                    newUser.Operations.Remove(ops);
+                switch (ops.path)
+                {
+                    case "/tickets":
+                        continue;
+                    case "/transactions":
+                        continue;
+                    case "/rule":
+                        continue;
+                    case "/events":
+                        continue;
+                    default:
+                        return BadRequest($"{ops.path} is not changeble for this path");
+                }
             }
 
             if (!ModelState.IsValid)
                 return BadRequest();
+
+            await _userService.UpdateUser(user);
 
             user.Password = "";
 

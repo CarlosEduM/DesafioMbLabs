@@ -46,6 +46,18 @@ namespace DesafioMbLabs.Services
         {
             _dbContext.Users.Update(user).State = EntityState.Modified;
 
+            //var payments = _dbContext.PaymentForms.Where(pf => pf.Owner.Id == user.Id).ToList();
+            //
+            //var updatedPfs = payments.Where(pf => user.Payments.Any(pf2 => pf2.Id == pf.Id));
+            //
+            //var newPfs = user.Payments.Where(pf => !payments.Any(pf2 => pf2.Id == pf.Id));
+            //
+            //var removedPfs = payments.Where(pf => !user.Payments.Any(pf2 => pf2.Id == pf.Id));
+            //
+            //_dbContext.PaymentForms.RemoveRange(removedPfs);
+            //_dbContext.PaymentForms.UpdateRange(updatedPfs);
+            //await _dbContext.PaymentForms.AddRangeAsync(newPfs);
+
             await _dbContext.SaveChangesAsync();
         }
     }

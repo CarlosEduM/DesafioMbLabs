@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace DesafioMbLabs.Models
 {
@@ -23,9 +22,6 @@ namespace DesafioMbLabs.Models
         [EnumDataType(typeof(PaymentMethod))]
         public virtual PaymentMethod Method { get { return PaymentMethod.MyTypeOfPayment; } }
 
-        [ForeignKey("UserId")]
-        public User Owner { get; set; }
-
         /// <summary>
         /// Create a void payment form
         /// </summary>
@@ -38,13 +34,13 @@ namespace DesafioMbLabs.Models
         /// Create a new Payment
         /// </summary>
         /// <param name="name"></param>
-        public PaymentForm(string name, User owner) => (Name, Owner) = (name, owner);
+        public PaymentForm(string name) => Name = name;
 
         /// <summary>
         /// Create a new Payment
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
-        public PaymentForm(int id, string name, User owner) => (Id, Name, Owner) = (id, name, owner);
+        public PaymentForm(int id, string name) => (Id, Name) = (id, name);
     }
 }
