@@ -22,28 +22,43 @@ namespace DesafioMbLabs.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public Event GetEvent(int id)
+        public async Task<Event> GetEvent(int id)
         {
-            return _dbContext.Events.FirstOrDefault(e => e.Id == id);
+            var eventGetted = await _dbContext.Events
+                .Include(e => e.Tickets.Where(t => t.TransactionData.PaymentStatus != PaymentStatus.Canceled))
+                .Include(e => e.Manager)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (eventGetted != null)
+                _dbContext.Entry(eventGetted).State = EntityState.Detached;
+
+            return eventGetted;
+        }
+
+        public async Task<Event> GetEvent(string eventName)
+        {
+            return await _dbContext.Events.FirstOrDefaultAsync(e => e.Name == eventName);
+        }
+
+        public List<Event> GetEvents()
+        {
+            return _dbContext.Events.ToList();
+        }
+
+        public List<Event> GetEvents(string eventName)
+        {
+            return _dbContext.Events.Where(e => e.Name.Contains(eventName)).ToList();
         }
 
         public List<Event> GetUserEvents(User user)
         {
-            return _dbContext.Events.Where(e => e.Manager.Id == user.Id).ToList();
+            return _dbContext.Events.Include(e => e.Tickets).Where(e => e.Manager.Id == user.Id).ToList();
         }
 
         public async Task RemoveEvent(Event eventToRemove)
         {
             _dbContext.Events.Remove(eventToRemove);
             await _dbContext.SaveChangesAsync();
-        }
-
-        public List<Event> SearchForAEvent(string? eventname)
-        {
-            if (string.IsNullOrEmpty(eventname))
-                return _dbContext.Events.ToList();
-
-            return _dbContext.Events.Where(e => e.Name.Contains(eventname)).ToList();
         }
 
         public async Task UpdateEvent(Event newEvent)

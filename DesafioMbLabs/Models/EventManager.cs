@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace DesafioMbLabs.Models
 {
@@ -12,7 +14,7 @@ namespace DesafioMbLabs.Models
     public class EventManager : User
     {
         [NotMapped]
-        public override string Rule { get { return nameof(EventManager); } }
+        public override string Role { get { return nameof(EventManager); } }
 
         [Required]
         [MinLength(14)]
@@ -25,6 +27,8 @@ namespace DesafioMbLabs.Models
         [MaxLength(64)]
         public string OrganizationName { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public List<Event> Events { get; set; }
 
         /// <summary>

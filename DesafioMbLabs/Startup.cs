@@ -26,7 +26,10 @@ namespace DesafioMbLabs
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers()
+                .AddNewtonsoftJson();
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DesafioMbLabs", Version = "v1" });
@@ -38,6 +41,7 @@ namespace DesafioMbLabs
             });
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEventService, EventService>();
 
             var key = Encoding.ASCII.GetBytes(Configuration["JwtSecret"]);
             services.AddAuthentication(options =>

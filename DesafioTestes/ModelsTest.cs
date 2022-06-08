@@ -28,8 +28,8 @@ namespace DesafioTestes
                 new(newEvent, user)
             };
 
-            if (user.Rule != nameof(EventManager))
-                Assert.Fail(user.Rule);
+            if (user.Role != nameof(EventManager))
+                Assert.Fail(user.Role);
 
             Transaction tran = new(newEvent, tickets, user.Payments[0]);
 
@@ -52,8 +52,8 @@ namespace DesafioTestes
                     new(newEvent, user)
                 };
 
-                if (user.Rule != nameof(EventManager))
-                    Assert.Fail(user.Rule);
+                if (user.Role != nameof(EventManager))
+                    Assert.Fail(user.Role);
                 Transaction tran = new(newEvent, tickets, new PaymentForm(0, "Meu pagamento", user));
 
                 newEvent.AddTicket(tickets);

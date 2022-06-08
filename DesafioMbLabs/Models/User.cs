@@ -14,7 +14,7 @@ namespace DesafioMbLabs.Models
     public class User : UserBase
     {
         [NotMapped]
-        public virtual string Rule { get { return nameof(User); } }
+        public virtual string Role { get { return nameof(User); } }
 
         [Required]
         [MinLength(11)]
@@ -30,9 +30,6 @@ namespace DesafioMbLabs.Models
         public List<Transaction> Transactions { get; set; }
 
         public List<Ticket> Tickets { get; set; }
-
-        [NotMapped]
-        private List<PaymentForm> _payments;
 
         public List<PaymentForm> Payments { get; set; }
 

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DesafioMbLabs.Models
 {
     /// <summary>
-    /// Represents a event
+    /// Represents a university or enterprise event
     /// </summary>
     [Table("Events")]
     public class Event
@@ -22,21 +22,20 @@ namespace DesafioMbLabs.Models
         public string Name { get; set; }
 
         [Required]
-        [MinLength(64)]
+        [MinLength(16)]
         [MaxLength(256)]
         public string Description { get; set; }
 
         [Required]
-        [MinLength(1)]
+        [Range(1, int.MaxValue)]
         public int NumberOfTickets { get; set; }
 
         [Required]
-        [MinLength(0)]
+        [Range(1, double.MaxValue)]
         public double TicketPrice { get; set; }
 
         public List<Ticket> Tickets { get; set; }
 
-        [Required]
         [ForeignKey("ManagerId")]
         public EventManager Manager { get; set; }
 
@@ -97,8 +96,6 @@ namespace DesafioMbLabs.Models
             EndDateToBuy = endDateToBuy;
             Location = location;
             Tickets = new();
-
-            ValidateEventDateTimes();
         }
 
         /// <summary>
@@ -132,16 +129,18 @@ namespace DesafioMbLabs.Models
             StartDateToBuy = startDateToBuy;
             EndDateToBuy = endDateToBuy;
             Location = location;
-
-            ValidateEventDateTimes();
         }
 
+        /// <summary>
+        /// Validate all date properties
+        /// </summary>
+        /// <exception cref="AppException"></exception>
         public void ValidateEventDateTimes()
         {
-            if (StartDateAndTime < DateTime.Today.AddDays(1))
+            if (StartDateAndTime < DateTime.UtcNow.AddDays(1))
                 throw new AppException("Start date must be a day after today");
 
-            if (StartDateToBuy < DateTime.Now)
+            if (StartDateToBuy < DateTime.UtcNow)
                 throw new AppException("Start date to buy must be after now");
 
             if (EndDateAndTime < StartDateAndTime)

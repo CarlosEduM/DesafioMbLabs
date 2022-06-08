@@ -25,6 +25,7 @@ namespace DesafioMbLabs.Controllers
 
         [HttpPost]
         [Route("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Login(UserBase loginData)
         {
             var user = await _userService.GetUser(loginData.Email, loginData.Password);
@@ -59,7 +60,7 @@ namespace DesafioMbLabs.Controllers
         public async Task<IActionResult> NewUser(User user)
         {
             if (null != await _userService.GetUser(user.Name))
-                return BadRequest();
+                return BadRequest(new { message = "Username already exists" });
 
             await _userService.CreateUser(user);
 
@@ -67,12 +68,12 @@ namespace DesafioMbLabs.Controllers
         }
 
         [HttpPost]
-        [Route("eventmanager")]
+        [Route("eventManager")]
         [AllowAnonymous]
         public async Task<IActionResult> NewEventManager(EventManager user)
         {
             if (null != await _userService.GetUser(user.Name))
-                return BadRequest();
+                return BadRequest(new { message = "Username already exists" });
 
             await _userService.CreateUser(user);
 
@@ -104,12 +105,15 @@ namespace DesafioMbLabs.Controllers
                     case "/events":
                         continue;
                     default:
-                        return BadRequest($"{ops.path} is not changeble for this path");
+                        return BadRequest(new { message = $"{ops.path} is not changeble for this path" });
                 }
             }
 
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(new
+                {
+                    message = "Some update invalid"
+                });
 
             await _userService.UpdateUser(user);
 
