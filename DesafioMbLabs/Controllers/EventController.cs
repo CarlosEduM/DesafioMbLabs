@@ -60,7 +60,7 @@ namespace DesafioMbLabs.Controllers
             if (user == null)
                 BadRequest(new { message = $"User {user} wasn't found in database" });
 
-            var events = _eventService.GetUserEvents(user);
+            var events = await _eventService.GetUserEventsAsync(user);
 
             foreach (var userEvent in events)
             {
@@ -90,12 +90,12 @@ namespace DesafioMbLabs.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Event>> GetEvents([FromQuery] string eventName)
+        public async Task<ActionResult<List<Event>>> GetEventsAsync([FromQuery] string eventName)
         {
             if (string.IsNullOrEmpty(eventName))
-                return _eventService.GetEvents();
+                return await _eventService.GetEvents();
 
-            return _eventService.GetEvents(eventName);
+            return await _eventService.GetEventsAsync(eventName);
         }
 
         [HttpPut]

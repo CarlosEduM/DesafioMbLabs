@@ -24,14 +24,14 @@ namespace DesafioMbLabs.Services
         /// Get all events
         /// </summary>
         /// <returns>A list of events</returns>
-        public List<Event> GetEvents();
+        public Task<List<Event>> GetEvents();
 
         /// <summary>
         /// Get all events that match the given event name
         /// </summary>
         /// <param name="eventName">Event name</param>
         /// <returns>A event</returns>
-        public List<Event> GetEvents(string eventName);
+        public Task<List<Event>> GetEventsAsync(string eventName);
 
         /// <summary>
         /// Get a event data by the id
@@ -52,6 +52,6 @@ namespace DesafioMbLabs.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns>List of events</returns>
-        public List<Event> GetUserEvents(User user);
+        public Task<List<Event>> GetUserEventsAsync(User user);
     }
 }

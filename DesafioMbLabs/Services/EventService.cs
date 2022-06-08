@@ -40,19 +40,19 @@ namespace DesafioMbLabs.Services
             return await _dbContext.Events.FirstOrDefaultAsync(e => e.Name == eventName);
         }
 
-        public List<Event> GetEvents()
+        public async Task<List<Event>> GetEvents()
         {
-            return _dbContext.Events.ToList();
+            return await _dbContext.Events.ToListAsync();
         }
 
-        public List<Event> GetEvents(string eventName)
+        public async Task<List<Event>> GetEventsAsync(string eventName)
         {
-            return _dbContext.Events.Where(e => e.Name.Contains(eventName)).ToList();
+            return await _dbContext.Events.Where(e => e.Name.Contains(eventName)).ToListAsync();
         }
 
-        public List<Event> GetUserEvents(User user)
+        public async Task<List<Event>> GetUserEventsAsync(User user)
         {
-            return _dbContext.Events.Include(e => e.Tickets).Where(e => e.Manager.Id == user.Id).ToList();
+            return await _dbContext.Events.Include(e => e.Tickets).Where(e => e.Manager.Id == user.Id).ToListAsync();
         }
 
         public async Task RemoveEvent(Event eventToRemove)
