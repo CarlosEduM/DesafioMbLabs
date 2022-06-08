@@ -9,7 +9,7 @@ namespace DesafioMbLabs.Services
         /// Service to create a new user on database
         /// </summary>
         /// <param name="user">User to be created</param>
-        public Task CreateUser(User user);
+        public Task CreateUserAsync(User user);
 
         /// <summary>
         /// Get a user data when he is making login
@@ -17,25 +17,25 @@ namespace DesafioMbLabs.Services
         /// <param name="email">User email</param>
         /// <param name="password">User password</param>
         /// <returns>User data</returns>
-        public Task<User> GetUser(string email, string password);
+        public Task<User> GetUserAsync(string email, string password);
 
         /// <summary>
         /// Get a user data when he was logged
         /// </summary>
         /// <param name="email"></param>
         /// <returns>User data</returns>
-        public Task<User> GetUser(string email);
+        public Task<User> GetUserAsync(string email);
 
         /// <summary>
         /// Update user data
         /// </summary>
         /// <param name="user"></param>
-        public Task UpdateUser(User user);
+        public Task UpdateUserAsync(User user);
 
         /// <summary>
         /// Delete user data
         /// </summary>
         /// <param name="user">User to be deleted</param>
-        public Task DeleteUser(User user);
+        public Task DeleteUserAsync(User user);
     }
 }

@@ -28,7 +28,7 @@ namespace DesafioMbLabs.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Login(UserBase loginData)
         {
-            var user = await _userService.GetUser(loginData.Email, loginData.Password);
+            var user = await _userService.GetUserAsync(loginData.Email, loginData.Password);
 
             if (user == null)
                 return NotFound(new { message = "Invalid email or password" });
@@ -45,7 +45,7 @@ namespace DesafioMbLabs.Controllers
         [Authorize]
         public async Task<ActionResult<User>> Get()
         {
-            var user = await _userService.GetUser(HttpContext.User.Identity.Name);
+            var user = await _userService.GetUserAsync(HttpContext.User.Identity.Name);
 
             if (user == null)
                 return NotFound();
@@ -59,10 +59,10 @@ namespace DesafioMbLabs.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> NewUser(User user)
         {
-            if (null != await _userService.GetUser(user.Name))
+            if (null != await _userService.GetUserAsync(user.Name))
                 return BadRequest(new { message = "Username already exists" });
 
-            await _userService.CreateUser(user);
+            await _userService.CreateUserAsync(user);
 
             return CreatedAtAction(nameof(NewUser), new { id = user.Id });
         }
@@ -72,10 +72,10 @@ namespace DesafioMbLabs.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> NewEventManager(EventManager user)
         {
-            if (null != await _userService.GetUser(user.Name))
+            if (null != await _userService.GetUserAsync(user.Name))
                 return BadRequest(new { message = "Username already exists" });
 
-            await _userService.CreateUser(user);
+            await _userService.CreateUserAsync(user);
 
             return CreatedAtAction(nameof(NewUser), new { id = user.Id });
         }
@@ -85,7 +85,7 @@ namespace DesafioMbLabs.Controllers
         [Authorize]
         public async Task<IActionResult> Update(JsonPatchDocument<User> newUser)
         {
-            var user = await _userService.GetUser(HttpContext.User.Identity.Name);
+            var user = await _userService.GetUserAsync(HttpContext.User.Identity.Name);
 
             if (user == null)
                 NotFound();
@@ -115,7 +115,7 @@ namespace DesafioMbLabs.Controllers
                     message = "Some update invalid"
                 });
 
-            await _userService.UpdateUser(user);
+            await _userService.UpdateUserAsync(user);
 
             user.Password = "";
 
@@ -126,12 +126,12 @@ namespace DesafioMbLabs.Controllers
         [Authorize]
         public async Task<IActionResult> Delete()
         {
-            User user = await _userService.GetUser(HttpContext.User.Identity.Name);
+            User user = await _userService.GetUserAsync(HttpContext.User.Identity.Name);
 
             if (user != null)
                 return NotFound();
 
-            await _userService.DeleteUser(user);
+            await _userService.DeleteUserAsync(user);
 
             return NoContent();
         }

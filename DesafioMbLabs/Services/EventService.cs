@@ -22,7 +22,7 @@ namespace DesafioMbLabs.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Event> GetEvent(int id)
+        public async Task<Event> GetEventAsync(int id)
         {
             var eventGetted = await _dbContext.Events
                 .Include(e => e.Tickets.Where(t => t.TransactionData.PaymentStatus != PaymentStatus.Canceled))
@@ -35,12 +35,12 @@ namespace DesafioMbLabs.Services
             return eventGetted;
         }
 
-        public async Task<Event> GetEvent(string eventName)
+        public async Task<Event> GetEventAsync(string eventName)
         {
             return await _dbContext.Events.FirstOrDefaultAsync(e => e.Name == eventName);
         }
 
-        public async Task<List<Event>> GetEvents()
+        public async Task<List<Event>> GetEventsAsync()
         {
             return await _dbContext.Events.ToListAsync();
         }
@@ -55,13 +55,13 @@ namespace DesafioMbLabs.Services
             return await _dbContext.Events.Include(e => e.Tickets).Where(e => e.Manager.Id == user.Id).ToListAsync();
         }
 
-        public async Task RemoveEvent(Event eventToRemove)
+        public async Task RemoveEventAsync(Event eventToRemove)
         {
             _dbContext.Events.Remove(eventToRemove);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateEvent(Event newEvent)
+        public async Task UpdateEventAsync(Event newEvent)
         {
             _dbContext.Events.Update(newEvent).State = EntityState.Modified;
 

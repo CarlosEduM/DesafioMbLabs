@@ -26,14 +26,14 @@ namespace DesafioMbLabs.Controllers
         [Authorize(Roles = "EventManager")]
         public async Task<IActionResult> NewEvent(Event newEvent)
         {
-            if (await _eventService.GetEvent(newEvent.Name) != null)
+            if (await _eventService.GetEventAsync(newEvent.Name) != null)
                 return BadRequest(new { message = "Event already exists" });
             
             try
             {
                 newEvent.ValidateEventDateTimes();
 
-                var user = await _userService.GetUser(User.Identity.Name);
+                var user = await _userService.GetUserAsync(User.Identity.Name);
 
                 if (user == null)
                     BadRequest(new { message = $"User {user} not found in database" });
@@ -55,7 +55,7 @@ namespace DesafioMbLabs.Controllers
         [Authorize(Roles = "EventManager")]
         public async Task<ActionResult<List<Event>>> GetUserEvents()
         {
-            var user = await _userService.GetUser(User.Identity.Name);
+            var user = await _userService.GetUserAsync(User.Identity.Name);
 
             if (user == null)
                 BadRequest(new { message = $"User {user} wasn't found in database" });
@@ -74,7 +74,7 @@ namespace DesafioMbLabs.Controllers
         [Route("{id}")]
         public async Task<ActionResult<dynamic>> GetEvent(int id)
         {
-            var eventGetted = await _eventService.GetEvent(id);
+            var eventGetted = await _eventService.GetEventAsync(id);
 
             if (eventGetted == null)
                 return NotFound();
@@ -93,7 +93,7 @@ namespace DesafioMbLabs.Controllers
         public async Task<ActionResult<List<Event>>> GetEventsAsync([FromQuery] string eventName)
         {
             if (string.IsNullOrEmpty(eventName))
-                return await _eventService.GetEvents();
+                return await _eventService.GetEventsAsync();
 
             return await _eventService.GetEventsAsync(eventName);
         }
@@ -106,7 +106,7 @@ namespace DesafioMbLabs.Controllers
             if (newEvent.Id != id)
                 return BadRequest(new { message = "New event has a diferent id number" });
 
-            var oldEvent = await _eventService.GetEvent(id);
+            var oldEvent = await _eventService.GetEventAsync(id);
 
             if (oldEvent == null)
                 return NotFound();
@@ -114,7 +114,7 @@ namespace DesafioMbLabs.Controllers
             newEvent.Manager = null;
             newEvent.Tickets = null;
 
-            await _eventService.UpdateEvent(newEvent);
+            await _eventService.UpdateEventAsync(newEvent);
 
             return NoContent();
         }
@@ -124,7 +124,7 @@ namespace DesafioMbLabs.Controllers
         [Authorize(Roles = "EventManager")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
-            var oldEvent = await _eventService.GetEvent(id);
+            var oldEvent = await _eventService.GetEventAsync(id);
 
             if (oldEvent == null)
                 return NotFound();
@@ -132,7 +132,7 @@ namespace DesafioMbLabs.Controllers
             if (oldEvent.StartDateToBuy < DateTime.UtcNow)
                 return BadRequest(new { message = "Ticket buy has already started"});
 
-            await _eventService.RemoveEvent(oldEvent);
+            await _eventService.RemoveEventAsync(oldEvent);
 
             return NoContent();
         }

@@ -15,19 +15,19 @@ namespace DesafioMbLabs.Services
             _dbContext = dbContext;
         }
 
-        public async Task DeleteUser(User user)
+        public async Task DeleteUserAsync(User user)
         {
             _dbContext.Remove(user);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User> GetUser(string email, string password)
+        public async Task<User> GetUserAsync(string email, string password)
         {
             return await _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
         }
 
-        public async Task<User> GetUser(string email)
+        public async Task<User> GetUserAsync(string email)
         {
             return await _dbContext.Users
                 .Include(u => u.Transactions)
@@ -36,13 +36,13 @@ namespace DesafioMbLabs.Services
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task CreateUser(User user)
+        public async Task CreateUserAsync(User user)
         {
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateUser(User user)
+        public async Task UpdateUserAsync(User user)
         {
             _dbContext.Users.Update(user).State = EntityState.Modified;
 

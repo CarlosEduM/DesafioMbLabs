@@ -12,19 +12,19 @@ namespace DesafioMbLabs.Services
         /// Remove a event
         /// </summary>
         /// <param name="eventToRemove">Event to be removed</param>
-        public Task RemoveEvent(Event eventToRemove);
+        public Task RemoveEventAsync(Event eventToRemove);
 
         /// <summary>
         /// Update a event
         /// </summary>
         /// <param name="newEvent">Event changed</param>
-        public Task UpdateEvent(Event newEvent);
+        public Task UpdateEventAsync(Event newEvent);
 
         /// <summary>
         /// Get all events
         /// </summary>
         /// <returns>A list of events</returns>
-        public Task<List<Event>> GetEvents();
+        public Task<List<Event>> GetEventsAsync();
 
         /// <summary>
         /// Get all events that match the given event name
@@ -38,14 +38,14 @@ namespace DesafioMbLabs.Services
         /// </summary>
         /// <param name="id">Event Id</param>
         /// <returns>A event</returns>
-        public Task<Event> GetEvent(int id);
+        public Task<Event> GetEventAsync(int id);
         
         /// <summary>
         /// Get a event by name to see if the event already exists a event with this name
         /// </summary>
         /// <param name="eventName">Event name</param>
         /// <returns>A event</returns>
-        public Task<Event> GetEvent(string eventName);
+        public Task<Event> GetEventAsync(string eventName);
 
         /// <summary>
         /// Get events from a user

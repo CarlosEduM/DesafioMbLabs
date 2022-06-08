@@ -19,7 +19,7 @@ namespace DesafioTestes
 
             user.Payments = new()
             {
-                new PaymentForm(0, "Meu pagamento", user)
+                new PaymentForm(0, "Meu pagamento")
             };
 
             List<Ticket> tickets = new()
@@ -54,7 +54,7 @@ namespace DesafioTestes
 
                 if (user.Role != nameof(EventManager))
                     Assert.Fail(user.Role);
-                Transaction tran = new(newEvent, tickets, new PaymentForm(0, "Meu pagamento", user));
+                Transaction tran = new(newEvent, tickets, new PaymentForm(0, "Meu pagamento"));
 
                 newEvent.AddTicket(tickets);
 

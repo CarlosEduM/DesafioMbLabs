@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DesafioMbLabs.Services
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
     {
         private readonly SqlServerContext _dbContext;
 
@@ -16,14 +16,14 @@ namespace DesafioMbLabs.Services
             _dbContext = dbContext;
         }
 
-        public async Task NewTransaction(Transaction newTransaction)
+        public async Task NewTransactionAsync(Transaction newTransaction)
         {
             _dbContext.Transactions.Add(newTransaction);
 
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Transaction>> GetUserTransactions(User user)
+        public async Task<List<Transaction>> GetUserTransactionsAsync(User user)
         {
             return await _dbContext.Transactions.Where(t => t.Tickets[0].Owner == user).ToListAsync();
         }
@@ -33,7 +33,7 @@ namespace DesafioMbLabs.Services
             return await _dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task UpdateTransaction(Transaction newTransaction)
+        public async Task UpdateTransactionAsync(Transaction newTransaction)
         {
             _dbContext.Transactions.Update(newTransaction).State = EntityState.Modified;
 
