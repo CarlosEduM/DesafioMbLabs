@@ -2,7 +2,6 @@ using DesafioMbLabs.Models;
 using DesafioMbLabs.Models.AppExceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 
 namespace DesafioTestes
 {
@@ -14,7 +13,7 @@ namespace DesafioTestes
         {
             EventManager user = new("aa@aa.com", "aaaaa", "007.428.201-81", "Carlos Eduardo", "98.640.072/0001-06", "Organization");
 
-            Event newEvent = new("festa no meu app", "Festa no meu app", 1, 20, user, DateTime.Now.AddMonths(1),
+            Event newEvent = new("festa no meu app", "Festa no meu app", 2, 20, user, DateTime.Now.AddMonths(1),
                 DateTime.Now.AddMonths(1).AddHours(6), DateTime.Now.AddMinutes(1), DateTime.Now.AddDays(15), "Meu app");
 
             user.Payments = new()
@@ -22,18 +21,7 @@ namespace DesafioTestes
                 new PaymentForm(0, "Meu pagamento")
             };
 
-            List<Ticket> tickets = new()
-            {
-                new(newEvent, user),
-                new(newEvent, user)
-            };
-
-            if (user.Role != nameof(EventManager))
-                Assert.Fail(user.Role);
-
-            Transaction tran = new(newEvent, tickets, user.Payments[0]);
-
-            newEvent.AddTicket(tickets);
+            user.BuyATicket(newEvent, user.Payments[0], 2);
         }
 
         [TestMethod]
@@ -46,17 +34,7 @@ namespace DesafioTestes
                 Event newEvent = new("festa no meu app", "Festa no meu app", 1, 20, user, DateTime.Now.AddMonths(1),
                     DateTime.Now.AddMonths(1).AddHours(6), DateTime.Now.AddMinutes(1), DateTime.Now.AddDays(15), "Meu app");
 
-                List<Ticket> tickets = new()
-                {
-                    new(newEvent, user),
-                    new(newEvent, user)
-                };
-
-                if (user.Role != nameof(EventManager))
-                    Assert.Fail(user.Role);
-                Transaction tran = new(newEvent, tickets, new PaymentForm(0, "Meu pagamento"));
-
-                newEvent.AddTicket(tickets);
+                user.BuyATicket(newEvent, user.Payments[0], 2);
 
                 Assert.Fail();
             }

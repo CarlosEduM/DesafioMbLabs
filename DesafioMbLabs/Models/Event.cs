@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace DesafioMbLabs.Models
 {
@@ -31,9 +33,11 @@ namespace DesafioMbLabs.Models
         public int NumberOfTickets { get; set; }
 
         [Required]
-        [Range(1, double.MaxValue)]
+        [Column(TypeName = "money")]
         public double TicketPrice { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public List<Ticket> Tickets { get; set; }
 
         [ForeignKey("ManagerId")]
@@ -132,6 +136,23 @@ namespace DesafioMbLabs.Models
         }
 
         /// <summary>
+        /// Create a new ticket to the event
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
+        public Ticket GetANewTicket()
+        {
+            if (Tickets.Count >= NumberOfTickets)
+                throw new AppException("Maximum number of tickets has been exceeded");
+
+            Ticket t = new(this);
+
+            Tickets.Add(t);
+
+            return t;
+        }
+
+        /// <summary>
         /// Validate all date properties
         /// </summary>
         /// <exception cref="AppException"></exception>
@@ -148,28 +169,6 @@ namespace DesafioMbLabs.Models
 
             if (EndDateToBuy < StartDateToBuy)
                 throw new AppException("End date to buy must be after start date to buy");
-        }
-
-        /// <summary>
-        /// Add a new ticket
-        /// </summary>
-        /// <param name="tickets">New tickets</param>
-        /// <exception cref="AppException"></exception>
-        public void AddTicket(List<Ticket> tickets)
-        {
-            if (NumberOfTickets > Tickets.Count + tickets.Count)
-                throw new AppException("Maximum number of tickets has been exceeded");
-
-            foreach (Ticket ticket in tickets)
-            {
-                if (ticket.TransactionData.BuyDateTime < StartDateToBuy)
-                    throw new AppException("Ticket bought date must be greater than start date to buy");
-
-                if (ticket.TransactionData.BuyDateTime >= EndDateToBuy)
-                    throw new AppException("Ticket bought date must be less than end date to buy");
-            }
-
-            Tickets.AddRange(tickets);
         }
     }
 }

@@ -1,17 +1,27 @@
 ﻿using DesafioMbLabs.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace DesafioMbLabs.Services
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
-        public static string GenerateTocken(User user, byte[] key)
+        private readonly IConfiguration _configuration;
+
+        public TokenService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public string GenerateTocken(User user)
         {
             JwtSecurityTokenHandler tokenHandler = new();
 
+            var key = Encoding.ASCII.GetBytes(_configuration["JwtSecret"]);
             var tockenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new(new Claim[]

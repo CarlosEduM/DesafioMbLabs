@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioMbLabs.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/transaction")]
     [ApiController]
     public class TransactionController : ControllerBase
     {

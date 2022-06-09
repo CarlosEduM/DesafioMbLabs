@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DesafioMbLabs.Controllers
@@ -14,12 +16,16 @@ namespace DesafioMbLabs.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
+
         private readonly IUserService _userService;
 
-        public EventController(IEventService eventService, IUserService userService)
+        private readonly ITransactionService _transactionService;
+
+        public EventController(IEventService eventService, IUserService userService, ITransactionService transactionService)
         {
             _eventService = eventService;
             _userService = userService;
+            _transactionService = transactionService;
         }
 
         [HttpPost]
@@ -28,7 +34,7 @@ namespace DesafioMbLabs.Controllers
         {
             if (await _eventService.GetEventAsync(newEvent.Name) != null)
                 return BadRequest(new { message = "Event already exists" });
-            
+
             try
             {
                 newEvent.ValidateEventDateTimes();
@@ -38,7 +44,7 @@ namespace DesafioMbLabs.Controllers
                 if (user == null)
                     BadRequest(new { message = $"User {user} not found in database" });
 
-                newEvent.Manager = (EventManager) user;
+                newEvent.Manager = (EventManager)user;
 
                 await _eventService.AddEvent(newEvent);
 
@@ -89,6 +95,67 @@ namespace DesafioMbLabs.Controllers
             return new { EventGetted = eventGetted, SoldTickets = soldTickets };
         }
 
+        [HttpPost]
+        [Route("{id}/buyTicket")]
+        [Authorize]
+        public async Task<IActionResult> BuyTicketToEvent([FromRoute] int id,
+                                                          [FromBody] Dictionary<string, int> dataToBuy)
+        {
+            try
+            {
+                int numberOfTickets = 1;
+                int paymentFormId = -1;
+
+                foreach (var key in dataToBuy.Keys)
+                {
+                    switch (key)
+                    {
+                        case "numberOfTickets":
+                            numberOfTickets = dataToBuy[key];
+                            break;
+                        case "paymentFormId":
+                            paymentFormId = dataToBuy[key];
+                            break;
+                    }
+                }
+
+                if (paymentFormId == -1)
+                    return BadRequest(new { message = "The camp paymentFormId don't cold be empty" });
+
+                if (numberOfTickets < 1)
+                    return BadRequest(new { message = "Tickets bought number must be greater than or egual to 1" });
+
+                var user = await _userService.GetUserAsync(User.Identity.Name);
+
+                if (user == null)
+                    return BadRequest(new { message = $"User {user.Email} wasn't found in database" });
+
+                var paymentForm = user.Payments.FirstOrDefault(pf => pf.Id == paymentFormId);
+
+                if (paymentForm == null)
+                    return BadRequest(new { message = $"Payment form id {paymentFormId} does't exists for user {user.Email} in database" });
+
+                var eventGetted = await _eventService.GetEventAsync(id);
+
+                if (eventGetted == null)
+                    return NotFound();
+
+                Transaction transaction = user.BuyATicket(eventGetted, paymentForm, numberOfTickets);
+
+                await _transactionService.NewTransactionAsync(transaction);
+
+                return CreatedAtAction(nameof(BuyTicketToEvent), transaction);
+            }
+            catch (AppException ae)
+            {
+                return BadRequest(new { message = ae.Message });
+            }
+            catch (JsonException)
+            {
+                return BadRequest(new { message = "The Payment Form is badly formated" });
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<Event>>> GetEventsAsync([FromQuery] string eventName)
         {
@@ -130,7 +197,7 @@ namespace DesafioMbLabs.Controllers
                 return NotFound();
 
             if (oldEvent.StartDateToBuy < DateTime.UtcNow)
-                return BadRequest(new { message = "Ticket buy has already started"});
+                return BadRequest(new { message = "Ticket buy has already started" });
 
             await _eventService.RemoveEventAsync(oldEvent);
 

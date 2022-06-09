@@ -30,7 +30,6 @@ namespace DesafioMbLabs.Services
         public async Task<User> GetUserAsync(string email)
         {
             return await _dbContext.Users
-                .Include(u => u.Transactions)
                 .Include(u => u.Tickets)
                 .Include(u => u.Payments)
                 .FirstOrDefaultAsync(u => u.Email == email);

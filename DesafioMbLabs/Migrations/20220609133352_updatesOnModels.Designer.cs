@@ -4,14 +4,16 @@ using DesafioMbLabs.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DesafioMbLabs.Migrations
 {
     [DbContext(typeof(SqlServerContext))]
-    partial class SqlServerContextModelSnapshot : ModelSnapshot
+    [Migration("20220609133352_updatesOnModels")]
+    partial class updatesOnModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,8 +62,8 @@ namespace DesafioMbLabs.Migrations
                     b.Property<DateTime>("StartDateToBuy")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("TicketPrice")
-                        .HasColumnType("money");
+                    b.Property<double>("TicketPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -142,7 +144,7 @@ namespace DesafioMbLabs.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(5,2)");
 
                     b.HasKey("Id");
 

@@ -16,11 +16,13 @@ namespace DesafioMbLabs.Models
         [NotMapped]
         public override string Role { get { return nameof(EventManager); } }
 
+        private string cnpj;
+
         [Required]
         [MinLength(14)]
         [MaxLength(18)]
         [CustomValidationCnpj]
-        public string Cnpj { get; set; }
+        public string Cnpj { get => cnpj; set => cnpj = FormatCnpj(value); }
 
         [Required]
         [MinLength(8)]

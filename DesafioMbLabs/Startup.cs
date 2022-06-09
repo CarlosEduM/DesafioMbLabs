@@ -42,6 +42,8 @@ namespace DesafioMbLabs
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ITransactionService, TransactionService>();
 
             var key = Encoding.ASCII.GetBytes(Configuration["JwtSecret"]);
             services.AddAuthentication(options =>

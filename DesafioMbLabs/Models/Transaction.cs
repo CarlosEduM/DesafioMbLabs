@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace DesafioMbLabs.Models
 {
@@ -23,20 +25,9 @@ namespace DesafioMbLabs.Models
         [DataType(DataType.DateTime)]
         public DateTime PaymentDateTime { get; set; }
 
-        [NotMapped]
-        private List<Ticket> _tickets;
-        
-        public List<Ticket> Tickets
-        {
-            get { return _tickets; }
-            set
-            {
-                if (value.Count < 1)
-                    throw new ArgumentException("Number of tickets bougth must be greater than 0");
-
-                _tickets = value;
-            }
-        }
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public List<Ticket> Tickets { get; set; }
 
         [Required]
         [EnumDataType(typeof(PaymentStatus))]
@@ -47,7 +38,7 @@ namespace DesafioMbLabs.Models
         public PaymentForm PaymentForm { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(5, 2)")]
+        [Column(TypeName = "money")]
         public double TotalPrice { get; set; }
 
         /// <summary>
@@ -61,26 +52,15 @@ namespace DesafioMbLabs.Models
         /// <summary>
         /// Create a new transaction
         /// </summary>
-        /// <param name="ticketsEvent">transaction related tickets</param>
         /// <param name="tickets">Tickets to be bought</param>
-        /// <param name="buyer">Buyer of tickets</param>
         /// <param name="paymentForm">Paymento form of transaction</param>
-        /// <exception cref="ArgumentException"></exception>
-        public Transaction(Event ticketsEvent, List<Ticket> tickets, PaymentForm paymentForm)
+        public Transaction(PaymentForm paymentForm)
         {
-            if (!tickets[0].Owner.Payments.Contains(paymentForm))
-                throw new AppException($"This payment form doesn't exist to user {tickets[0].Owner}");
-
             BuyDateTime = DateTime.UtcNow;
             PaymentForm = paymentForm;
-            TotalPrice = ticketsEvent.TicketPrice * tickets.Count;
-
-            foreach (Ticket ticket in tickets)
-            {
-                ticket.TransactionData = this;
-            }
-
-            Tickets = tickets;
+            PaymentStatus = PaymentStatus.Pending;
+            TotalPrice = 0;
+            Tickets = new();
         }
 
         /// <summary>
@@ -91,11 +71,15 @@ namespace DesafioMbLabs.Models
         /// <param name="paymentDateTime">Date and time of payment</param>
         /// <param name="tickets">Tickets bought</param>
         /// <param name="paymentStatus">Payment status</param>
-        /// <param name="buyer">Who bought the ticket</param>
         /// <param name="paymentForm">Payment form of transaction</param>
         /// <param name="totalPrice">Total price of transaction</param>
-        public Transaction(int id, DateTime buyDateTime, DateTime paymentDateTime, List<Ticket> tickets,
-            PaymentStatus paymentStatus, PaymentForm paymentForm, double totalPrice)
+        public Transaction(int id,
+                           DateTime buyDateTime,
+                           DateTime paymentDateTime,
+                           List<Ticket> tickets,
+                           PaymentStatus paymentStatus,
+                           PaymentForm paymentForm,
+                           double totalPrice)
         {
             Id = id;
             BuyDateTime = buyDateTime;
@@ -104,6 +88,18 @@ namespace DesafioMbLabs.Models
             PaymentStatus = paymentStatus;
             PaymentForm = paymentForm;
             TotalPrice = totalPrice;
+        }
+
+        /// <summary>
+        /// Add a ticket for the transaction
+        /// </summary>
+        /// <param name="ticket">Ticket to add</param>
+        /// <param name="ticketPrice">Ticket price</param>
+        public void AddATicket(Ticket ticket, double ticketPrice)
+        {
+            Tickets.Add(ticket);
+
+            TotalPrice += ticketPrice;
         }
     }
 }

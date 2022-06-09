@@ -37,12 +37,7 @@ namespace DesafioMbLabs.Models
         /// Create a new Event
         /// </summary>
         /// <param name="ticketEvent">Event to which the ticket belongs</param>
-        /// <param name="owner">Ticket owner</param>
-        public Ticket(Event ticketEvent, User owner)
-        {
-            TicketEvent = ticketEvent;
-            Owner = owner;
-        }
+        public Ticket(Event ticketEvent) => TicketEvent = ticketEvent;
 
         /// <summary>
         /// Create a new Event
@@ -50,7 +45,7 @@ namespace DesafioMbLabs.Models
         /// <param name="id">Ticket id</param>
         /// <param name="ticketEvent">Event to which the ticket belongs</param>
         /// <param name="owner">Ticket owner</param>
-        /// <param name="TransactionData">Transaction where the ticket was bought</param>
+        /// <param name="transactionData">Transaction where the ticket was bought</param>
         public Ticket(long id, Event ticketEvent, User owner, Transaction transactionData)
         {
             Id = id;

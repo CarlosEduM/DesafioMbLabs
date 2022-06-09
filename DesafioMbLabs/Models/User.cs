@@ -1,9 +1,11 @@
-﻿using System;
+﻿using DesafioMbLabs.Models.AppExceptions;
+using DesafioMbLabs.Models.CustomAttributes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DesafioMbLabs.Models.CustomAttributes;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace DesafioMbLabs.Models
 {
@@ -16,19 +18,21 @@ namespace DesafioMbLabs.Models
         [NotMapped]
         public virtual string Role { get { return nameof(User); } }
 
+        private string cpf;
+
         [Required]
         [MinLength(11)]
-        [MaxLength(13)]
+        [MaxLength(14)]
         [CustomValidationCpf]
-        public string Cpf { get; set; }
+        public string Cpf { get => cpf; set => cpf = FormatCpf(value); }
 
         [Required]
         [MinLength(8)]
         [MaxLength(64)]
         public string Name { get; set; }
 
-        public List<Transaction> Transactions { get; set; }
-
+        [JsonIgnore]
+        [IgnoreDataMember]
         public List<Ticket> Tickets { get; set; }
 
         public List<PaymentForm> Payments { get; set; }
@@ -38,7 +42,6 @@ namespace DesafioMbLabs.Models
         /// </summary>
         public User()
         {
-            Transactions = new List<Transaction>();
             Tickets = new List<Ticket>();
             Payments = new List<PaymentForm>();
         }
@@ -54,7 +57,6 @@ namespace DesafioMbLabs.Models
         {
             Cpf = cpf;
             Name = name;
-            Transactions = new();
             Tickets = new();
             Payments = new();
         }
@@ -69,14 +71,46 @@ namespace DesafioMbLabs.Models
         /// <param name="name">Username</param>
         /// <param name="transactions">Transactions made by the user</param>
         /// <param name="tickets">User tickets</param>
-        public User(int id, string email, string password, string cpf, string name,
-            List<Transaction> transactions, List<Ticket> tickets, List<PaymentForm> payment) : base(id, email, password)
+        public User(int id,
+                    string email,
+                    string password,
+                    string cpf,
+                    string name,
+                    List<Ticket> tickets,
+                    List<PaymentForm> payment) : base(id, email, password)
         {
             Cpf = cpf;
             Name = name;
-            Transactions = transactions;
             Tickets = tickets;
             Payments = payment;
+        }
+
+        /// <summary>
+        /// Buy a new ticket to the user
+        /// </summary>
+        /// <param name="eventToBuy">Event for which the ticket will be bought</param>
+        /// <param name="paymentForm">Paymento form</param>
+        /// <param name="numOfTicketsToBuy">Number of tickets to buy</param>
+        /// <returns>The transaction created</returns>
+        /// <exception cref="AppException"></exception>
+        public Transaction BuyATicket(Event eventToBuy, PaymentForm paymentForm, int numOfTicketsToBuy)
+        {
+            if (!Payments.Any(pf => pf.Id == paymentForm.Id && pf.Name == paymentForm.Name))
+                throw new AppException($"Payment form {paymentForm.Name} does't exists for user {Email} in database");
+
+            List<Ticket> tickets = new();
+
+            Transaction transaction = new(paymentForm);
+
+            for (int i = 0; i < numOfTicketsToBuy; i++)
+            {
+                Ticket t = eventToBuy.GetANewTicket();
+                t.Owner = this;
+                transaction.AddATicket(t, eventToBuy.TicketPrice);
+                tickets.Add(t);
+            }
+
+            return transaction;
         }
 
         /// <summary>
