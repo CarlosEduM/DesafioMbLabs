@@ -134,6 +134,12 @@ namespace DesafioMbLabs.Controllers
                     message = "Some update invalid"
                 });
 
+            foreach (var paymentForm in user.Payments)
+            {
+                if (user.Payments.Where(u => paymentForm.Name == u.Name).ToArray().Length > 1)
+                    return BadRequest(new { message = $"Payment {paymentForm.Name} already exists" });
+            }
+
             await _userService.UpdateUserAsync(user);
 
             user.Password = "";
