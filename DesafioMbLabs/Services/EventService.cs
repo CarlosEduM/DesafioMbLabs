@@ -36,6 +36,19 @@ namespace DesafioMbLabs.Services
             return eventGetted;
         }
 
+        public async Task<Event> GetEventAsync(int id, User manager)
+        {
+            var eventGetted = await _dbContext.Events
+                .Include(e => e.Tickets)
+                .ThenInclude(t => t.TransactionData)
+                .FirstOrDefaultAsync(e => e.Id == id && e.Manager.Id != manager.Id);
+
+            if (eventGetted != null)
+                _dbContext.Entry(eventGetted).State = EntityState.Detached;
+
+            return eventGetted;
+        }
+
         public async Task<Event> GetEventAsync(string eventName)
         {
             return await _dbContext.Events.FirstOrDefaultAsync(e => e.Name == eventName);

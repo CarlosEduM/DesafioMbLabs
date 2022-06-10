@@ -21,7 +21,9 @@ namespace DesafioMbLabs.Controllers
 
         private readonly ITransactionService _transactionService;
 
-        public EventController(IEventService eventService, IUserService userService, ITransactionService transactionService)
+        public EventController(IEventService eventService,
+                               IUserService userService,
+                               ITransactionService transactionService)
         {
             _eventService = eventService;
             _userService = userService;
@@ -83,14 +85,55 @@ namespace DesafioMbLabs.Controllers
             if (eventGetted == null)
                 return NotFound();
 
-            eventGetted.Manager = null;
-
-            int soldTickets = eventGetted.Tickets.Count;
+            int soldTickets = eventGetted.Tickets
+                .Where(t => t.TransactionData.PaymentStatus != PaymentStatus.Canceled)
+                .ToList().Count;
 
             if (!User.Identity.IsAuthenticated || User.Identity.Name != eventGetted.Manager.Name)
                 eventGetted.Tickets = null;
 
+            eventGetted.Manager = null;
+
             return new { EventGetted = eventGetted, SoldTickets = soldTickets };
+        }
+
+        [HttpGet("{eventId}/ticket")]
+        [Authorize(Roles = "EventManager")]
+        public async Task<ActionResult<dynamic>> GetEventTickets(int eventId)
+        {
+            var user = await _userService.GetUserAsync(User.Identity.Name);
+
+            if (user == null)
+                BadRequest(new { message = $"User {user} wasn't found in database" });
+
+            var eventGetted = await _eventService.GetEventAsync(eventId, user);
+
+            if (eventGetted == null)
+                return NotFound();
+
+            return eventGetted.Tickets;
+        }
+
+        [HttpGet("{eventId}/ticket/{ticketId}")]
+        [Authorize(Roles = "EventManager")]
+        public async Task<ActionResult<dynamic>> GetEventTicket(int eventId, int ticketId)
+        {
+            var user = await _userService.GetUserAsync(User.Identity.Name);
+
+            if (user == null)
+                BadRequest(new { message = $"User {user} wasn't found in database" });
+
+            var eventGetted = await _eventService.GetEventAsync(eventId, user);
+
+            if (eventGetted == null)
+                return NotFound();
+
+            var ticket = eventGetted.Tickets.FirstOrDefault(t => t.Id == ticketId);
+
+            if (ticket == null)
+                return NotFound();
+
+            return ticket;
         }
 
         [HttpPost("{id}/buyTicket")]

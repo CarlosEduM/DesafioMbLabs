@@ -39,7 +39,14 @@ namespace DesafioMbLabs.Services
         /// <param name="id">Event Id</param>
         /// <returns>A event</returns>
         public Task<Event> GetEventAsync(int id);
-        
+
+        /// <summary>
+        /// Get a event data from a user by the id
+        /// </summary>
+        /// <param name="id">Event Id</param>
+        /// <returns>A event</returns>
+        public Task<Event> GetEventAsync(int id, User manager);
+
         /// <summary>
         /// Get a event by name to see if the event already exists a event with this name
         /// </summary>

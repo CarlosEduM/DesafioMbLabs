@@ -3,6 +3,8 @@ using DesafioMbLabs.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DesafioMbLabs.Controllers
@@ -41,7 +43,7 @@ namespace DesafioMbLabs.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<User>> Get()
+        public async Task<ActionResult<User>> GetUser()
         {
             var user = await _userService.GetUserAsync(HttpContext.User.Identity.Name);
 
@@ -51,6 +53,35 @@ namespace DesafioMbLabs.Controllers
             user.Password = "";
 
             return user;
+        }
+
+        [HttpGet("ticket")]
+        [Authorize]
+        public async Task<ActionResult<List<Ticket>>> GetTickets()
+        {
+            var user = await _userService.GetUserAsync(HttpContext.User.Identity.Name);
+
+            if (user == null)
+                return NotFound();
+
+            return user.Tickets;
+        }
+
+        [HttpGet("ticket/{id}")]
+        [Authorize]
+        public async Task<ActionResult<Ticket>> GetTicket(int id)
+        {
+            var user = await _userService.GetUserAsync(HttpContext.User.Identity.Name);
+
+            if (user == null)
+                return NotFound();
+
+            Ticket ticket = user.Tickets.FirstOrDefault(t => t.Id == id);
+
+            if (ticket == null)
+                return NotFound();
+
+            return ticket;
         }
 
         [HttpPost]
