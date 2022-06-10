@@ -56,8 +56,7 @@ namespace DesafioMbLabs.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("userEvents")]
+        [HttpGet("userEvents")]
         [Authorize(Roles = "EventManager")]
         public async Task<ActionResult<List<Event>>> GetUserEvents()
         {
@@ -76,8 +75,7 @@ namespace DesafioMbLabs.Controllers
             return events;
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<dynamic>> GetEvent(int id)
         {
             var eventGetted = await _eventService.GetEventAsync(id);
@@ -95,8 +93,7 @@ namespace DesafioMbLabs.Controllers
             return new { EventGetted = eventGetted, SoldTickets = soldTickets };
         }
 
-        [HttpPost]
-        [Route("{id}/buyTicket")]
+        [HttpPost("{id}/buyTicket")]
         [Authorize]
         public async Task<IActionResult> BuyTicketToEvent([FromRoute] int id,
                                                           [FromBody] Dictionary<string, int> dataToBuy)
@@ -140,6 +137,8 @@ namespace DesafioMbLabs.Controllers
                 if (eventGetted == null)
                     return NotFound();
 
+                eventGetted.Tickets = eventGetted.Tickets.Where(t => t.TransactionData.PaymentStatus != PaymentStatus.Canceled).ToList();
+
                 Transaction transaction = user.BuyATicket(eventGetted, paymentForm, numberOfTickets);
 
                 await _transactionService.NewTransactionAsync(transaction);
@@ -165,8 +164,7 @@ namespace DesafioMbLabs.Controllers
             return await _eventService.GetEventsAsync(eventName);
         }
 
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id}")]
         [Authorize(Roles = "EventManager")]
         public async Task<IActionResult> UpdateEvent(int id, Event newEvent)
         {
@@ -186,8 +184,7 @@ namespace DesafioMbLabs.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         [Authorize(Roles = "EventManager")]
         public async Task<IActionResult> DeleteEvent(int id)
         {

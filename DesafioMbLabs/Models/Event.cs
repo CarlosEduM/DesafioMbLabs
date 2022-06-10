@@ -142,7 +142,7 @@ namespace DesafioMbLabs.Models
         /// <exception cref="AppException"></exception>
         public Ticket GetANewTicket()
         {
-            if (Tickets.Count >= NumberOfTickets)
+            if (Tickets.Count > NumberOfTickets)
                 throw new AppException("Maximum number of tickets has been exceeded");
 
             Ticket t = new(this);

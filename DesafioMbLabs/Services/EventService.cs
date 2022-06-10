@@ -25,7 +25,8 @@ namespace DesafioMbLabs.Services
         public async Task<Event> GetEventAsync(int id)
         {
             var eventGetted = await _dbContext.Events
-                .Include(e => e.Tickets.Where(t => t.TransactionData.PaymentStatus != PaymentStatus.Canceled))
+                .Include(e => e.Tickets)
+                .ThenInclude(t => t.TransactionData)
                 .Include(e => e.Manager)
                 .FirstOrDefaultAsync(e => e.Id == id);
 

@@ -101,5 +101,33 @@ namespace DesafioMbLabs.Models
 
             TotalPrice += ticketPrice;
         }
+
+        /// <summary>
+        /// Change payment status to confirmed
+        /// </summary>
+        /// <exception cref="AppException"></exception>
+        public void PayTransaction()
+        {
+            if (PaymentStatus == PaymentStatus.Confirmed)
+                throw new AppException("Transaction already paid");
+
+            if (PaymentStatus == PaymentStatus.Canceled)
+                throw new AppException("Transaction was canceled");
+
+            PaymentDateTime = DateTime.UtcNow;
+            PaymentStatus = PaymentStatus.Confirmed;
+        }
+
+        /// <summary>
+        /// Change payment status to canceled
+        /// </summary>
+        /// <exception cref="AppException"></exception>
+        public void CancelTransaction()
+        {
+            if (PaymentStatus == PaymentStatus.Canceled)
+                throw new AppException("Transaction already canceled");
+
+            PaymentStatus = PaymentStatus.Canceled;
+        }
     }
 }
