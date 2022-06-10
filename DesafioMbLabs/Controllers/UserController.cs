@@ -23,8 +23,7 @@ namespace DesafioMbLabs.Controllers
             _tockenService = tokenService;
         }
 
-        [HttpPost]
-        [Route("login")]
+        [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Login(UserBase loginData)
         {
@@ -96,8 +95,7 @@ namespace DesafioMbLabs.Controllers
             return CreatedAtAction(nameof(NewUser), new { id = user.Id });
         }
 
-        [HttpPost]
-        [Route("eventManager")]
+        [HttpPost("eventManager")]
         [AllowAnonymous]
         public async Task<IActionResult> NewEventManager(EventManager user)
         {
