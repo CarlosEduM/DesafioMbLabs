@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DesafioMbLabs\TicketsManager.csproj" />
+    <ProjectReference Include="..\TicketsManager\TicketsManager.csproj" />
   </ItemGroup>
 
 </Project>
