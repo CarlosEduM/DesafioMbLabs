@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesafioMbLabs", "DesafioMbLabs\DesafioMbLabs.csproj", "{28D19985-9347-481F-B9F8-EB38D420A468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketsManager", "DesafioMbLabs\TicketsManager.csproj", "{28D19985-9347-481F-B9F8-EB38D420A468}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesafioTestes", "DesafioTestes\DesafioTestes.csproj", "{F4C82442-AC7C-41CD-BBDC-EAF261C7D8A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketsManagerTestes", "DesafioTestes\TicketsManagerTestes.csproj", "{F4C82442-AC7C-41CD-BBDC-EAF261C7D8A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
