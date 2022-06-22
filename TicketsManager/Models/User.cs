@@ -1,5 +1,5 @@
-﻿using DesafioMbLabs.Models.AppExceptions;
-using DesafioMbLabs.Models.CustomAttributes;
+﻿using TicketsManager.Models.AppExceptions;
+using TicketsManager.Models.CustomAttributes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace DesafioMbLabs.Models
+namespace TicketsManager.Models
 {
     /// <summary>
     /// Default user for the app

@@ -1,12 +1,12 @@
-﻿using DesafioMbLabs.Models;
-using DesafioMbLabs.Models.AppExceptions;
-using DesafioMbLabs.Services;
+﻿using TicketsManager.Models;
+using TicketsManager.Models.AppExceptions;
+using TicketsManager.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DesafioMbLabs.Controllers
+namespace TicketsManager.Controllers
 {
     [Route("api/transaction")]
     [ApiController]

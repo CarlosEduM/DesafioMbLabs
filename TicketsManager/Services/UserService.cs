@@ -1,10 +1,10 @@
-﻿using DesafioMbLabs.Data;
-using DesafioMbLabs.Models;
+﻿using TicketsManager.Data;
+using TicketsManager.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DesafioMbLabs.Services
+namespace TicketsManager.Services
 {
     public class UserService : IUserService
     {

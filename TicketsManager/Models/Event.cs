@@ -1,4 +1,4 @@
-﻿using DesafioMbLabs.Models.AppExceptions;
+﻿using TicketsManager.Models.AppExceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace DesafioMbLabs.Models
+namespace TicketsManager.Models
 {
     /// <summary>
     /// Represents a university or enterprise event

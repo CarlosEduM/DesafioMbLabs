@@ -1,5 +1,5 @@
-using DesafioMbLabs.Data;
-using DesafioMbLabs.Services;
+using TicketsManager.Data;
+using TicketsManager.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-namespace DesafioMbLabs
+namespace TicketsManager
 {
     public class Startup
     {
@@ -32,7 +32,7 @@ namespace DesafioMbLabs
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DesafioMbLabs", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TicketsManager", Version = "v1" });
             });
 
             services.AddDbContext<SqlServerContext>(options =>
@@ -72,7 +72,7 @@ namespace DesafioMbLabs
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DesafioMbLabs v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TicketsManager v1"));
             }
 
             app.UseHttpsRedirection();

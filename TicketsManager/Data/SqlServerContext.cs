@@ -1,7 +1,7 @@
-﻿using DesafioMbLabs.Models;
+﻿using TicketsManager.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DesafioMbLabs.Data
+namespace TicketsManager.Data
 {
     public class SqlServerContext : DbContext
     {

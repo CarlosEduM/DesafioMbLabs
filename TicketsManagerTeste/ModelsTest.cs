@@ -1,5 +1,5 @@
-using DesafioMbLabs.Models;
-using DesafioMbLabs.Models.AppExceptions;
+using TicketsManager.Models;
+using TicketsManager.Models.AppExceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 

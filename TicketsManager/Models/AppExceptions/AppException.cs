@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DesafioMbLabs.Models.AppExceptions
+namespace TicketsManager.Models.AppExceptions
 {
     public class AppException : Exception
     {

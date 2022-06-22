@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DesafioMbLabs.Models.CustomAttributes
+namespace TicketsManager.Models.CustomAttributes
 {
     public class CustomValidationCnpj : ValidationAttribute
     {

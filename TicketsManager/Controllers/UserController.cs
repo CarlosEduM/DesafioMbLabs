@@ -1,5 +1,5 @@
-﻿using DesafioMbLabs.Models;
-using DesafioMbLabs.Services;
+﻿using TicketsManager.Models;
+using TicketsManager.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DesafioMbLabs.Controllers
+namespace TicketsManager.Controllers
 {
     [Route("api/user")]
     [ApiController]

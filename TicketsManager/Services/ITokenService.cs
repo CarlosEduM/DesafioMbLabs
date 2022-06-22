@@ -1,6 +1,6 @@
-﻿using DesafioMbLabs.Models;
+﻿using TicketsManager.Models;
 
-namespace DesafioMbLabs.Services
+namespace TicketsManager.Services
 {
     public interface ITokenService
     {

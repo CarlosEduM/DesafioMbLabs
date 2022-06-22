@@ -1,8 +1,8 @@
-﻿using DesafioMbLabs.Models;
+﻿using TicketsManager.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DesafioMbLabs.Services
+namespace TicketsManager.Services
 {
     public interface ITransactionService
     {
